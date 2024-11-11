@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ClassController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +22,7 @@ Route::get('/', function () {
         "buahs" => ["pisang", "jeruk", "apel", "mangga"]
     ]);
 });
-Route::get('/about', function () {
-    return view('about');
-});
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
+
+Route::get('/students/export_excel', [StudentController::class, 'export_excel'])->name('students.export.excel');
