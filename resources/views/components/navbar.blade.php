@@ -11,12 +11,20 @@
                     <a class="nav-link {{ Request::is('/') ? 'active' : '' }}" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('students') ? 'active' : '' }}"
+                    <a class="nav-link {{ Request::is('students*') ? 'active' : '' }}"
                         href="{{ route('students.index') }}">Student</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ Request::is('classes') ? 'active' : '' }}"
+                    <a class="nav-link {{ Request::is('classes*') ? 'active' : '' }}"
                         href="{{ route('classes.index') }}">Class</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('extracurriculars*') ? 'active' : '' }}"
+                        href="{{ route('extracurriculars.index') }}">Extracurricular</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::is('teachers*') ? 'active' : '' }}"
+                        href="{{ route('teachers.index') }}">Teacher</a>
                 </li>
 
             </ul>

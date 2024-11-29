@@ -20,12 +20,15 @@
 @section('content')
     <h1>Ini Halaman Student</h1>
     <x-button href="/" color="primary">Ke Home</x-button>
-    <div class="mt-3 d-flex">
+    <div class="mt-3 d-flex justify-content-between">
         <x-button href="{{ route('students.export.excel') }}" color="success">Download Excel</x-button>
+        <x-button href="{{ route('students.create') }}" color="success">Tambah Student</x-button>
     </div>
-
-
+    <div class="mt-3">
+        <x-flash-message />
+    </div>
     <div class=" my-3">
+        <div class="table-responsive ">
         <table id="students" class="table  table-bordered">
             <thead>
                 <tr>
@@ -34,7 +37,7 @@
                     <th>Nis</th>
                     <th>Gender</th>
                     <th>Class</th>
-                    <th>Action</th>
+                    <th class="w-25 text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,12 +48,27 @@
                         <td>{{ $student->nis }}</td>
                         <td>{{ $student->gender }}</td>
                         <td>{{ $student->schoolClass->name }}</td>
-                        <td><a href="" class="btn btn-primary">tes</a></td>
+
+                        <td>
+                            <div class="d-flex justify-content-center flex-wrap gap-2">
+                            <x-button color="info" href="{{ route('students.show', $student->id) }}">Detail</x-button>
+                            <x-button href="{{ route('students.edit', $student->id) }}" color="warning">Edit</x-button>
+                            <form action="{{ route('students.destroy',$student->id) }}" 
+                                method="post"
+                                onsubmit="return confirm('Are u sure deleted student {{ $student->name }}?')"
+                                >
+                                @csrf
+                                @method('delete')
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                        </div>
+                        </td>
                     </tr>
                 @empty
                 @endforelse
             </tbody>
         </table>
+    </div>
     </div>
 
 @endsection

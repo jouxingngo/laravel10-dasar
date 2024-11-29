@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Classes')
+@section('title', 'Extracurriculars')
 @push('style')
     <!-- DataTables CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
@@ -18,9 +18,9 @@
     </script>
 @endpush
 @section('content')
-    <h1>Ini Halaman Class</h1>
-    <x-button href="/" color="primary">Ke Home</x-button>
-    <x-button href="{{ route('classes.create') }}" color="success">Tambah Class</x-button>
+    <h1>Student in {{ $ekskul->name }}</h1>
+    <x-button href="{{ route('extracurriculars.index') }}" color="primary">Extracurricular</x-button>
+    <x-flash-message/>
 
     <div class=" my-3">
         <table id="classes" class="table table-bordered">
@@ -28,23 +28,34 @@
                 <tr>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Teacher</th>
-                    <th>Actions</th>
+                    <th>Action</th>
 
                 </tr>
             </thead>
             <tbody>
-                @forelse ($classes as $class)
+                @forelse ($ekskul->students as $student)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $class->name }}</td>
-                        <td>{{ $class->teacher->name}}</td>
                         <td>
-                            <x-button href="{{ route('classes.show', $class->id) }}" color="info" >Show students in <b>{{ $class->name }}</b></x-button>
+                            {{ $student->name }},
                         </td>
+                        <td>
+                            <form
+                                action="{{ route('extracurriculars.students.destroy', ['ekskulId' => $ekskul->id, 'studentId' => $student->id]) }}"
+                                method="POST"
+                                onsubmit="return confirm('Are you sure you want to delete this student from {{ $ekskul->name }}?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    Delete from {{ $ekskul->name }}
+                                </button>
+                            </form>
+                        </td>
+                    @empty
+                        No Student in {{ $ekskul->name }}
                     </tr>
-                @empty
                 @endforelse
+
             </tbody>
         </table>
     </div>

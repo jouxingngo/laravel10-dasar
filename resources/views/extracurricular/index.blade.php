@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', 'Classes')
+@section('title', 'Extracurriculars')
 @push('style')
     <!-- DataTables CSS via CDN -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
@@ -18,29 +18,27 @@
     </script>
 @endpush
 @section('content')
-    <h1>Ini Halaman Class</h1>
+    <h1>Ini Halaman Ekskul</h1>
     <x-button href="/" color="primary">Ke Home</x-button>
-    <x-button href="{{ route('classes.create') }}" color="success">Tambah Class</x-button>
-
+    <x-button href="{{ route('extracurriculars.create') }}" color="success">Tambah Ekskul</x-button>
+    <x-button href="{{ route('extracurriculars.student.create') }}" color="success">Tambah Student Ekskul</x-button>
     <div class=" my-3">
         <table id="classes" class="table table-bordered">
             <thead>
                 <tr>
                     <th>No.</th>
                     <th>Name</th>
-                    <th>Teacher</th>
-                    <th>Actions</th>
+                    <th>Action</th>
 
                 </tr>
             </thead>
             <tbody>
-                @forelse ($classes as $class)
+                @forelse ($ekskuls as $ekskul)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $class->name }}</td>
-                        <td>{{ $class->teacher->name}}</td>
+                        <td>{{ $ekskul->name }}</td>
                         <td>
-                            <x-button href="{{ route('classes.show', $class->id) }}" color="info" >Show students in <b>{{ $class->name }}</b></x-button>
+                            <x-button href="{{ route('extracurriculars.show',$ekskul->id) }}" color="info">Student in {{ $ekskul->name }}</x-button>
                         </td>
                     </tr>
                 @empty

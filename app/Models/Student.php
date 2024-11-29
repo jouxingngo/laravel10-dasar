@@ -15,4 +15,14 @@ class Student extends Model
     {
         return $this->belongsTo(SchoolClass::class);
     }
+
+    /**
+     * The extracurricurals that belong to the Student
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function extracurriculars()
+    {
+        return $this->belongsToMany(Extracurricular::class, 'student_extracurriculars', 'student_id', 'extracurricular_id');
+    }
 }

@@ -11,17 +11,19 @@ class StudentsExport implements FromCollection, WithHeadings
     public function collection()
     {
         // Mengambil data student dengan relasi ke SchoolClass
-        return Student::with('schoolClass')
-            ->orderBy('name', 'asc')
-            ->get()
+        return Student::with(['schoolClass', 'extracurriculars'])
+        ->orderBy('name', 'asc')
+        ->get()
             ->map(function ($student) {
                 return [
                     'name' => $student->name,
                     'nis' => $student->nis,
                     'gender' => $student->gender,
                     'class' => $student->schoolClass->name,
-                ];
-            });
+                'extracurriculars' => $student->extracurriculars->pluck('name')->implode(', '), // Menggabungkan nama extracurricular dengan koma
+            ];
+        });
+    
     }
 
     public function headings(): array
@@ -31,6 +33,7 @@ class StudentsExport implements FromCollection, WithHeadings
             'NIS',
             'Gender',
             'Class',
+            'Extracurriculars'
         ];
     }
 }

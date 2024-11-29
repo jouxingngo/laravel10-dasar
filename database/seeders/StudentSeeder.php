@@ -13,7 +13,6 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        Student::truncate();
         Student::factory(30)->create();
     }
 }
