@@ -6,7 +6,7 @@
                 @csrf
                 <div class="mb-3">
                     <label class="form-label" for="name">Name :</label>
-                    <input type="text" class="form-control" id="name" name="name">
+                    <input type="text" class="form-control" autofocus id="name" name="name">
                 </div>
                 
                 <div class="mb-3">

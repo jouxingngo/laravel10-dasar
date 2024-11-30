@@ -14,10 +14,17 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $students = Student::with(['schoolClass'])->get();
-
+        $keyword = $request->keyword;
+        $students = Student::with(['schoolClass'])
+        ->where('name', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('gender', $keyword)
+            ->orWhere('nis', $keyword)
+            ->orWhereHas('schoolClass', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', '%' . $keyword . '%');
+            })
+            ->paginate(15);
         return view('student.index', compact('students'));
     }
 
@@ -96,4 +103,33 @@ class StudentController extends Controller
     {
         return Excel::download(new StudentsExport, "students.xlsx");
     }
+
+    public function showDeleted()
+    {
+        $deletedStudents = Student::onlyTrashed()->get();
+        return view('student.deleted', compact('deletedStudents'));
+    }
+
+    public function forceDelete($id)
+    {
+        $student = Student::withTrashed()->findOrFail($id);
+        $student->forceDelete();
+
+        session()->flash('status', 'success');
+        session()->flash('message', 'Student ' . $student->name . " Student deleted permanently");
+
+
+        return redirect()->route('students.deleted');
+    }
+
+    public function restore($id)
+    {
+        $student = Student::withTrashed()->findOrFail($id);
+        $student->restore();
+        session()->flash('status', 'success');
+        session()->flash('message', 'Student ' . $student->name . ' has been successfully restored.');
+
+        return redirect()->route('students.deleted');
+    }
+    
 }
