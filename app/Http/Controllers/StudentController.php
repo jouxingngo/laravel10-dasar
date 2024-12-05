@@ -10,6 +10,8 @@ use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
@@ -64,7 +66,17 @@ class StudentController extends Controller
         //     'name' => 'max:50'
         // ]);
 
+        // updload image
+        $filename = "";
+        if ($request->file('photo')) {
+            $ekstension = $request->file('photo')->getClientOriginalExtension();
+            $filename = $request->name . "_" . now()->timestamp . "." . $ekstension;
+            $request->file('photo')->storeAs('images', $filename);
+        }
+
+
         // menggunakan mass asignment
+        $request['image'] = $filename;
         $student = Student::create($request->all());
         if ($student) {
             session()->flash('status', 'success');
@@ -84,6 +96,18 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         $student = Student::findOrFail($id);
+        $filename = $student->image;
+        // Jika ada file image yang diupload, lakukan pengolahan gambar
+        if ($request->has('photo')) {
+            Storage::delete('images/' . $student->image);
+
+            $ekstension = $request->file('photo')->getClientOriginalExtension();
+            $filename = $request->name . "_" . now()->timestamp . "." . $ekstension;
+            $request->file('photo')->storeAs('images', $filename);
+        }
+
+
+        $request['image'] = $filename;
         $student->update($request->all());
         return redirect()->route('students.index');
     }

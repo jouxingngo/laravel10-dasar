@@ -3,7 +3,7 @@
 @section('content')
     <div class=" mt-4 mx-auto col-8">
             <x-validation-error/>
-            <form action="{{ route('students.store') }}" method="post">
+            <form action="{{ route('students.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
                     <label class="form-label" for="name">Name :</label>
@@ -31,8 +31,12 @@
                         @endforelse
                     </select>
                 </div>
+                <div class="mb-3 ">
+                    <label for="pp" class="form-label">Photo Profile</label>
+                    <input type="file" class="form-control" id="pp" name="photo">
+                </div>
                 
-                <div class="mb-3">
+                <div class="input mb-3">
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
                 

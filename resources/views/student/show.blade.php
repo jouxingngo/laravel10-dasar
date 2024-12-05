@@ -23,6 +23,9 @@
     <x-button href="{{ route('students.index') }}" color="primary">Ke Students</x-button>
     <ul>
         <li>Name                : {{ $student->name }}</li>
+        <img src="{{ $student->image ? asset('storage/images/' . $student->image) : asset('img/default.jpg') }}"
+        alt="" width="200px" height="200px" class=" rounded-circle">
+        <dd>{{ $student->image }}</dd>
         <li>NIS                 : {{ $student->nis }}</li>
         <li>Gender              : {{ $student->gender }}</li>
         <li>Class               : {{ $student->schoolClass->name }}</li>

@@ -14,6 +14,7 @@
 
 <body>
 
+
     <x-navbar />
     <div class="container">
         @yield('content')

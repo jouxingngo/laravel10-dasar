@@ -2,7 +2,7 @@
 @section('title', 'Student Create')
 @section('content')
     <div class=" mt-4 mx-auto col-8">
-            <form action="{{ route('students.update', $student->id) }}" method="post">
+            <form action="{{ route('students.update', $student->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
@@ -31,6 +31,11 @@
                         @endforelse
                     </select>
                 </div>
+                <div class="mb-3 ">
+                    <label for="pp" class="form-label">Photo Profile</label>
+                    <input type="file" class="form-control" id="pp" name="photo">
+                </div>
+                
                 
                 <div class="mb-3">
                     <button type="submit" class="btn btn-success">Save</button>
