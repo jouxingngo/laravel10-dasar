@@ -29,4 +29,14 @@ class AuthController extends Controller
         session()->flash('message', 'email or password incorect');
         return redirect()->route('login');
     }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
 }

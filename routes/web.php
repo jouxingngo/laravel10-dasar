@@ -21,21 +21,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home', [
-        "name" => "Joxing Ngo",
-        "role" => "admin",
-        "buahs" => ["pisang", "jeruk", "apel", "mangga"]
-    ]);
+    return view('home');
 });
 
-Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/login', [AuthController::class, 'authtentication'])->name('login.auth');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'authtentication'])->name('login.auth');
+});
 
 
 
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/students/export_excel', [StudentController::class, 'export_excel'])->name('students.export.excel');
+
+    Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
     Route::get('/students/deleted', [StudentController::class, 'showDeleted'])->name('students.deleted');
