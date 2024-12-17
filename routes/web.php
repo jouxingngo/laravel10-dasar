@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
+
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -30,23 +28,27 @@ Route::middleware(['guest'])->group(function () {
 });
 
 
-
-
 Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('home');
+    });
     Route::get('/students/export_excel', [StudentController::class, 'export_excel'])->name('students.export.excel');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-    Route::get('/students/deleted', [StudentController::class, 'showDeleted'])->name('students.deleted');
-    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-    Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
-    Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
-    Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
-    Route::delete('/students/{id}/forceDelete', [StudentController::class, 'forceDelete'])->name('students.forceDelete');
-    Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
-    Route::get('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
-    Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+    Route::middleware(['must-admin'])->group(function () {
+        Route::get('/students/deleted', [StudentController::class, 'showDeleted'])->name('students.deleted');
+        Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+        Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+        Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+        Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+        Route::delete('/students/{id}/forceDelete', [StudentController::class, 'forceDelete'])->name('students.forceDelete');
+        Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+        Route::get('/students/{id}/restore', [StudentController::class, 'restore'])->name('students.restore');
+    });
+
+    Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show')->middleware(['must-admin-teacher']);
 
     Route::get('/classes', [ClassController::class, 'index'])->name('classes.index');
     Route::get('/classes/create', [ClassController::class, 'create'])->name('classes.create');

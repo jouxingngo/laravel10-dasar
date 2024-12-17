@@ -49,7 +49,9 @@
                         <th>Nis</th>
                         <th>Gender</th>
                         <th>Class</th>
-                        <th class="w-25 text-center">Actions</th>
+                        @if (Auth::user()->role_id == 3 || Auth::user()->role_id == 2)
+                            <th class="w-25 text-center">Actions</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -60,21 +62,25 @@
                             <td>{{ $student->nis }}</td>
                             <td>{{ $student->gender }}</td>
                             <td>{{ $student->schoolClass->name }}</td>
+                            @if (Auth::user()->role_id == 3 || Auth::user()->role_id == 2)
+                                <td>
+                                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                                        <x-button color="info"
+                                            href="{{ route('students.show', $student->id) }}">Detail</x-button>
+                                        @if (Auth::user()->role_id == 3)
+                                            <x-button href="{{ route('students.edit', $student->id) }}"
+                                                color="warning">Edit</x-button>
+                                            <form action="{{ route('students.destroy', $student->id) }}" method="post"
+                                                onsubmit="return confirm('Are u sure deleted student {{ $student->name }}?')">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="btn btn-danger" type="submit">Delete</button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
+                            @endif
 
-                            <td>
-                                <div class="d-flex justify-content-center flex-wrap gap-2">
-                                    <x-button color="info"
-                                        href="{{ route('students.show', $student->id) }}">Detail</x-button>
-                                    <x-button href="{{ route('students.edit', $student->id) }}"
-                                        color="warning">Edit</x-button>
-                                    <form action="{{ route('students.destroy', $student->id) }}" method="post"
-                                        onsubmit="return confirm('Are u sure deleted student {{ $student->name }}?')">
-                                        @csrf
-                                        @method('delete')
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
-                                </div>
-                            </td>
                         </tr>
                     @empty
                     @endforelse
